@@ -132,6 +132,9 @@ disable=R,
         zip-builtin-not-iterating,
         missing-module-docstring,
         missing-function-docstring,
+        missing-class-docstring,
+        unused-argument,
+        consider-using-f-string,
 
 
 [REPORTS]

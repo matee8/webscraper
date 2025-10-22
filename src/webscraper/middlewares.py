@@ -6,7 +6,7 @@
 from scrapy import signals
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+# from itemadapter import ItemAdapter
 
 
 class WebscraperSpiderMiddleware:
@@ -50,7 +50,7 @@ class WebscraperSpiderMiddleware:
             yield item_or_request
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        spider.logger.info('Spider opened: %s' % spider.name)
 
 
 class WebscraperDownloaderMiddleware:
@@ -97,4 +97,4 @@ class WebscraperDownloaderMiddleware:
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        spider.logger.info('Spider opened: %s' % spider.name)
