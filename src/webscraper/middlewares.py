@@ -3,7 +3,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from scrapy import signals
+from typing import AsyncIterator, Iterable, Any
+
+from scrapy import signals, Spider
+from scrapy.crawler import Crawler
+from scrapy.http import Response, Request
 
 # useful for handling different item types with a single interface
 # from itemadapter import ItemAdapter
@@ -15,20 +19,23 @@ class WebscraperSpiderMiddleware:
     # passed objects.
 
     @classmethod
-    def from_crawler(cls, crawler):
+    def from_crawler(cls, crawler: Crawler) -> 'WebscraperSpiderMiddleware':
         # This method is used by Scrapy to create your spiders.
         s = cls()
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
-    def process_spider_input(self, response, spider):
+    def process_spider_input(self, response: Response, spider: Spider) -> None:
         # Called for each response that goes through the spider
         # middleware and into the spider.
 
         # Should return None or raise an exception.
         return None
 
-    def process_spider_output(self, response, result, spider):
+    def process_spider_output(self,
+                              response: Response,
+                              result: Iterable[Any],
+                              spider: Spider | None = None) -> Iterable[Any]:
         # Called with the results returned from the Spider, after
         # it has processed the response.
 
@@ -36,20 +43,23 @@ class WebscraperSpiderMiddleware:
         for i in result:
             yield i
 
-    def process_spider_exception(self, response, exception, spider):
+    def process_spider_exception(
+            self,
+            response: Response,
+            exception: Exception,
+            spider: Spider | None = None) -> Iterable[Any] | None:
         # Called when a spider or process_spider_input() method
         # (from other spider middleware) raises an exception.
 
         # Should return either None or an iterable of Request or item objects.
         pass
 
-    async def process_start(self, start):
-        # Called with an async iterator over the spider start() method or the
-        # maching method of an earlier spider middleware.
+    async def process_start(self,
+                            start: AsyncIterator[Any]) -> AsyncIterator[Any]:
         async for item_or_request in start:
             yield item_or_request
 
-    def spider_opened(self, spider):
+    def spider_opened(self, spider: Spider) -> None:
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
@@ -59,13 +69,13 @@ class WebscraperDownloaderMiddleware:
     # passed objects.
 
     @classmethod
-    def from_crawler(cls, crawler):
+    def from_crawler(cls, crawler: Crawler) -> 'WebscraperDownloaderMiddleware':
         # This method is used by Scrapy to create your spiders.
         s = cls()
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
-    def process_request(self, request, spider):
+    def process_request(self, request: Request, spider: Spider):
         # Called for each request that goes through the downloader
         # middleware.
 
@@ -77,7 +87,8 @@ class WebscraperDownloaderMiddleware:
         #   installed downloader middleware will be called
         return None
 
-    def process_response(self, request, response, spider):
+    def process_response(self, request: Request, response: Response,
+                         spider: Spider) -> Request | Response:
         # Called with the response returned from the downloader.
 
         # Must either;
@@ -86,7 +97,8 @@ class WebscraperDownloaderMiddleware:
         # - or raise IgnoreRequest
         return response
 
-    def process_exception(self, request, exception, spider):
+    def process_exception(self, request: Request, exception: Exception,
+                          spider: Spider) -> Request | Response | None:
         # Called when a download handler or a process_request()
         # (from other downloader middleware) raises an exception.
 
@@ -96,5 +108,5 @@ class WebscraperDownloaderMiddleware:
         # - return a Request object: stops process_exception() chain
         pass
 
-    def spider_opened(self, spider):
+    def spider_opened(self, spider: Spider) -> None:
         spider.logger.info('Spider opened: %s' % spider.name)
