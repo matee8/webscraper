@@ -9,7 +9,11 @@ try:
 except ImportError:
     import tomli as tomllib
 
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils import project
+
 from webscraper.config import AppConfig
+from webscraper.spiders.configurable import ConfigurableSpider
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -33,8 +37,23 @@ def load_config(config_path: Path = Path('config.toml')) -> Optional[AppConfig]:
 def main() -> None:
     config = load_config()
 
-    if config:
-        logger.info('Found %d tasks in configuration.', len(config.tasks))
+    if not config:
+        logger.warning('No tasks found in configuration. Exiting.')
+        return
+
+    logger.info('Found %d tasks in configuration.', len(config.tasks))
+
+    settings = project.get_project_settings()
+    process = CrawlerProcess(settings)
+
+    for task in config.tasks:
+        task_name = (task.name or
+                     f'Unnamed task for {task.domain or task.start_urls[0]}')
+        logging.info('Queueing task: %s.', task_name)
+        process.crawl(ConfigurableSpider, task_config=task)
+
+    process.start()
+    logger.info('All tasks have been completed.')
 
 
 if __name__ == '__main__':
