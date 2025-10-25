@@ -1,10 +1,11 @@
-import scrapy
-from scrapy import Item
+from scrapy import Field, Item
 
 
-class WebscraperItem(Item):
-    url = scrapy.Field()
-    title = scrapy.Field()
-    author = scrapy.Field()
-    body_text = scrapy.Field()
-    html = scrapy.Field()
+class ScrapedItem(Item):
+    source_url = Field()
+    source_domain = Field()
+    crawl_timestamp = Field()
+    extractor = Field()
+    language = Field()
+
+    content = Field()
