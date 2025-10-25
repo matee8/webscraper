@@ -22,7 +22,7 @@ class ExtractionPipeline:
         if task_config.mode == 'trafilatura':
             logger.debug('Using trafilatura to extract from %s.', response.url)
             json_str = trafilatura.extract(response.body,
-                                           url=adapter.pop('url'),
+                                           url=response.url,
                                            output_format='json',
                                            with_metadata=True,
                                            include_comments=False,
