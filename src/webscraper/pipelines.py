@@ -1,6 +1,8 @@
 import logging
 import json
+from datetime import datetime, timezone
 from typing import Any
+from urllib import parse
 
 import trafilatura
 from itemadapter import ItemAdapter
@@ -13,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ExtractionPipeline:
 
-    def process_item(self, item: Item, spider: ConfigurableSpider) -> Any:
+    def process_item(self, item: Item, spider: ConfigurableSpider) -> Item:
         adapter = ItemAdapter(item)
         task_config = spider.task_config
 
@@ -45,5 +47,16 @@ class ExtractionPipeline:
         else:
             logger.warning('Extraction mode `%s` is not yet implemented.',
                            task_config.mode)
+
+        return item
+
+
+class ProvenancePipeline:
+
+    def process_item(self, item: Item, spider: ConfigurableSpider) -> Item:
+        adapter = ItemAdapter(item)
+        adapter['crawl_timestamp'] = datetime.now(timezone.utc).isoformat()
+        adapter['source_domain'] = parse.urlparse(adapter['source_url']).netloc
+        adapter['extractor'] = spider.task_config.mode
 
         return item
