@@ -5,6 +5,7 @@ from scrapy import Spider
 from scrapy.http import Response, Request
 
 from webscraper.config import TaskConfig
+from webscraper.items import ScrapedItem
 
 logger = logging.getLogger(__name__)
 
@@ -30,5 +31,10 @@ class ConfigurableSpider(Spider):
     def parse(self, response: Response,
               **kwargs) -> Iterable[Optional[Request]]:
         logger.info('Processing page: %s', response.url)
+
+        item = ScrapedItem()
+        item['source_url'] = response.url
+
+        item['response'] = response
 
         yield None
