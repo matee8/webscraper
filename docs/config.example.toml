@@ -8,6 +8,7 @@ start_urls = [
 javascript = false
 crawl = true
 handle_pdfs = false
+domain = "example.com"
 
 [tasks.crawl_rules]
 allow = ["/news/"]
