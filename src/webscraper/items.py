@@ -9,3 +9,5 @@ class ScrapedItem(Item):
     language = Field()
 
     content = Field()
+
+    response = Field()
