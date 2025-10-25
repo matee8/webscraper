@@ -29,7 +29,7 @@ class ConfigurableSpider(Spider):
         logger.info('Initialized spider for task: %s.', self.task_name)
 
     def parse(self, response: Response,
-              **kwargs) -> Iterable[Optional[Request]]:
+              **kwargs) -> Iterable[Optional[ScrapedItem]]:
         logger.info('Processing page: %s', response.url)
 
         item = ScrapedItem()
@@ -37,4 +37,4 @@ class ConfigurableSpider(Spider):
 
         item['response'] = response
 
-        yield None
+        yield item
