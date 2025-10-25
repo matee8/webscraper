@@ -38,3 +38,4 @@ dev = [
 ]
 
 [project.scripts]
+webscraper = "webscraper._scripts.main:main"
