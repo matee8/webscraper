@@ -36,7 +36,7 @@ class ExtractionPipeline:
             extracted_data = json.loads(json_str)
 
             adapter['content'] = {
-                'text': json_str,
+                'text': extracted_data.get('text'),
                 'metadata': {
                     'title': extracted_data.get('title'),
                     'author': extracted_data.get('author')
