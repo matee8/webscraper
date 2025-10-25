@@ -1643,6 +1643,7 @@ source = { editable = "." }
 dependencies = [
     { name = "scrapy" },
     { name = "scrapy-playwright" },
+    { name = "tomli" },
     { name = "trafilatura" },
 ]
 
@@ -1659,6 +1660,7 @@ dev = [
 requires-dist = [
     { name = "scrapy", specifier = ">=2.12.0,<3.0.0" },
     { name = "scrapy-playwright", specifier = ">=0.0.44,<1.0.0" },
+    { name = "tomli", specifier = ">=2.0.0,<3.0.0" },
     { name = "trafilatura", specifier = ">=2.0.0,<3.0.0" },
 ]
 
