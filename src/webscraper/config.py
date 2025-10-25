@@ -1,10 +1,12 @@
 import dataclasses
 from typing import Any, Dict, List, Literal, Optional
 
+
 @dataclasses.dataclass(frozen=True)
 class CrawlRules:
     allow: List[str] = dataclasses.field(default_factory=list)
     deny: List[str] = dataclasses.field(default_factory=list)
+
 
 @dataclasses.dataclass(frozen=True)
 class TaskConfig:
