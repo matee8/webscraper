@@ -2,7 +2,7 @@ import logging
 from typing import Iterable, Optional
 
 from scrapy import Spider
-from scrapy.http import Response, Request
+from scrapy.http import Response
 
 from webscraper.config import TaskConfig
 from webscraper.items import ScrapedItem
