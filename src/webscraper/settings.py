@@ -15,4 +15,5 @@ FEED_EXPORT_ENCODING = 'utf-8'
 ITEM_PIPELINES = {
     'webscraper.pipelines.ExtractionPipeline': 300,
     'webscraper.pipelines.ProvenancePipeline': 400,
+    'webscraper.pipelines.ValidationPipeline': 500,
 }

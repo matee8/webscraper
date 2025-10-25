@@ -1,12 +1,12 @@
 import logging
 import json
 from datetime import datetime, timezone
-from typing import Any
 from urllib import parse
 
 import trafilatura
 from itemadapter import ItemAdapter
 from scrapy import Item
+from scrapy.exceptions import DropItem
 
 from webscraper.spiders.configurable import ConfigurableSpider
 
@@ -58,5 +58,22 @@ class ProvenancePipeline:
         adapter['crawl_timestamp'] = datetime.now(timezone.utc).isoformat()
         adapter['source_domain'] = parse.urlparse(adapter['source_url']).netloc
         adapter['extractor'] = spider.task_config.mode
+
+        return item
+
+
+class ValidationPipeline:
+
+    def process_item(self, item: Item, spider: ConfigurableSpider) -> Item:
+        adapter = ItemAdapter(item)
+
+        content = adapter.get('content')
+        if not content:
+            raise DropItem(
+                f"Missing content field in item: {adapter.get('source_url')}")
+
+        if not content.get('text') or not content['text'].strip():
+            raise DropItem('Missing or empty text in content for item: '
+                           f"{adapter.get('source_url')}")
 
         return item
